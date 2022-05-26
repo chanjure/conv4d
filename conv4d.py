@@ -31,34 +31,32 @@ class Conv4d(nn.Module):
 		# str_shape = [n, in_ch, ker_dim, out_dim]
 		# out_dim = input_dim - ker_dim + 1
 		str_shape = (x.shape[0],
-								 x.shape[1],
-								 self.k.shape[2],
-								 self.k.shape[3],
-								 self.k.shape[4],
-								 self.k.shape[5],
-								 x.shape[2] - self.k.shape[2] + 1,
-								 x.shape[3] - self.k.shape[3] + 1,
-								 x.shape[4] - self.k.shape[4] + 1,
-								 x.shape[5] - self.k.shape[5] + 1
-								)
+				x.shape[1],
+				self.k.shape[2],
+				self.k.shape[3],
+				self.k.shape[4],
+				self.k.shape[5],
+				x.shape[2] - self.k.shape[2] + 1,
+				x.shape[3] - self.k.shape[3] + 1,
+				x.shape[4] - self.k.shape[4] + 1,
+				x.shape[5] - self.k.shape[5] + 1)
 
 		# x_strides = [n, in_ch, in_dim, strides=in_dim]
 		x_strides = (x.stride()[0],
-								 x.stride()[1],
-								 x.stride()[2],
-								 x.stride()[3],
-								 x.stride()[4],
-								 x.stride()[5],
-								 x.stride()[2],
-								 x.stride()[3],
-								 x.stride()[4],
-								 x.stride()[5],
-								)
+				x.stride()[1],
+				x.stride()[2],
+				x.stride()[3],
+				x.stride()[4],
+				x.stride()[5],
+				x.stride()[2],
+				x.stride()[3],
+				x.stride()[4],
+				x.stride()[5])
 
 		x = tc.as_strided(x,
-											size=str_shape,
-											stride=x_strides
-										 )
+				size=str_shape,
+				stride=x_strides
+				)
 
 		return tc.tensordot(x, self.k, dims=([1,2,3,4,5],[0,2,3,4,5])).permute(0,5,1,2,3,4)
 
@@ -78,34 +76,31 @@ class MaxPool4d(nn.Module):
 
 		# str_shape = [n, inc, ker_dim, out_dim]
 		str_shape = (x.shape[0],
-								 x.shape[1],
-								 self.ker_shape[0],
-								 self.ker_shape[1],
-								 self.ker_shape[2],
-								 self.ker_shape[3],
-								 int((x.shape[2] - self.ker_shape[0])/self.stride + 1),
-								 int((x.shape[3] - self.ker_shape[1])/self.stride + 1),
-								 int((x.shape[4] - self.ker_shape[2])/self.stride +	1),
-								 int((x.shape[5] - self.ker_shape[3])/self.stride + 1)
-								)
+				x.shape[1],
+				self.ker_shape[0],
+				self.ker_shape[1],
+				self.ker_shape[2],
+				self.ker_shape[3],
+				int((x.shape[2] - self.ker_shape[0])/self.stride + 1),
+				int((x.shape[3] - self.ker_shape[1])/self.stride + 1),
+				int((x.shape[4] - self.ker_shape[2])/self.stride + 1),
+				int((x.shape[5] - self.ker_shape[3])/self.stride + 1))
 
 		# x_strides = [n, inc, in_dim, in_stride=in_dim]
 		x_strides = (x.stride()[0],
-								 x.stride()[1],
-								 x.stride()[2],
-								 x.stride()[3],
-								 x.stride()[4],
-								 x.stride()[5],
-								 x.stride()[2],
-								 x.stride()[3],
-								 x.stride()[4],
-								 x.stride()[5]
-								)
+				x.stride()[1],
+				x.stride()[2],
+				x.stride()[3],
+				x.stride()[4],
+				x.stride()[5],
+				x.stride()[2],
+				x.stride()[3],
+				x.stride()[4],
+				x.stride()[5])
 
 		x = tc.as_strided(x,
-											size=str_shape,
-											stride=x_strides
-										 )
+				size=str_shape,
+				stride=x_strides)
 
 		return tc.amax(x, dim=(2,3,4,5))
 
@@ -127,33 +122,30 @@ class AvgPool4d(nn.Module):
 
 		# str_shape = [n, inc, ker_dim, out_dim]
 		str_shape = (x.shape[0],
-								 x.shape[1],
-								 self.ker_shape[0],
-								 self.ker_shape[1],
-								 self.ker_shape[2],
-								 self.ker_shape[3],
-								 int((x.shape[2] - self.ker_shape[0])/self.stride + 1),
-								 int((x.shape[3] - self.ker_shape[1])/self.stride + 1),
-								 int((x.shape[4] - self.ker_shape[2])/self.stride +	1),
-								 int((x.shape[5] - self.ker_shape[3])/self.stride + 1)
-								)
+				x.shape[1],
+				self.ker_shape[0],
+				self.ker_shape[1],
+				self.ker_shape[2],
+				self.ker_shape[3],
+				int((x.shape[2] - self.ker_shape[0])/self.stride + 1),
+				int((x.shape[3] - self.ker_shape[1])/self.stride + 1),
+				int((x.shape[4] - self.ker_shape[2])/self.stride + 1),
+				int((x.shape[5] - self.ker_shape[3])/self.stride + 1))
 
 		# x_strides = [n, inc, in_dim, in_stride=in_dim]
 		x_strides = (x.stride()[0],
-								 x.stride()[1],
-								 x.stride()[2],
-								 x.stride()[3],
-								 x.stride()[4],
-								 x.stride()[5],
-								 x.stride()[2],
-								 x.stride()[3],
-								 x.stride()[4],
-								 x.stride()[5]
-								)
+				x.stride()[1],
+				x.stride()[2],
+				x.stride()[3],
+				x.stride()[4],
+				x.stride()[5],
+				x.stride()[2],
+				x.stride()[3],
+				x.stride()[4],
+				x.stride()[5])
 
 		x = tc.as_strided(x,
-											size=str_shape,
-											stride=x_strides
-										 )
+				size=str_shape,
+				stride=x_strides)
 
 		return tc.mean(x, dim=(2,3,4,5))
