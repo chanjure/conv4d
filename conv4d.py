@@ -58,10 +58,9 @@ class Conv4d(nn.Module):
                 stride=x_strides
                 )
 
-        b_x = tc.ones_like(x)
-        out_b = tc.tensordot(b_x, self.bias, dims=([1,2,3,4,5],[0,2,3,4,5]))
-
         if self.bias is not None:
+            b_x = tc.ones_like(x)
+            out_b = tc.tensordot(b_x, self.bias, dims=([1,2,3,4,5],[0,2,3,4,5]))
             return (tc.tensordot(x, self.k, dims=([1,2,3,4,5],[0,2,3,4,5])) + out_b).permute(0,5,1,2,3,4)
         else:
             return tc.tensordot(x, self.k, dims=([1,2,3,4,5],[0,2,3,4,5])).permute(0,5,1,2,3,4)
